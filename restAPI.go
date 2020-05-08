@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Game defines a new data structure for whatever object required
+//Game defines a new data structure for a game
 type Game struct {
 	ID       int      `json:"id"`
 	Teams    []string `json:"Teams"`
@@ -18,7 +18,7 @@ type Game struct {
 	Players2 []string `json:"Players2"`
 }
 
-//Games initialises the constructor of object type Article
+//Games initialises a list of games
 type Games []Game
 
 func allGames(w http.ResponseWriter, r *http.Request) {
@@ -38,10 +38,16 @@ func allGames(w http.ResponseWriter, r *http.Request) {
 func addGames(w http.ResponseWriter, r *http.Request) {
 	req := r.Body
 	body, err := ioutil.ReadAll(req)
-	if err == nil {
+	if err == nil && body != nil {
 		fmt.Fprintf(w, string(body))
 	}
-	fmt.Fprintf(w, "yes!")
+	var nGame Game
+	errr := json.NewDecoder(r.Body).Decode(&nGame)
+
+	if errr != nil {
+
+	}
+	//fmt.Fprintf(w, nGame)
 }
 
 //Function to display a homepage
