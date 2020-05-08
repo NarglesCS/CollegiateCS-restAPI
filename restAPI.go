@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"game"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,20 +12,20 @@ import (
 )
 
 //Game defines a new data structure for a game
-type Game struct {
-	ID       int      `json:"id"`
-	Teams    []string `json:"Teams"`
-	Players1 []string `json:"Players1"`
-	Players2 []string `json:"Players2"`
-}
+//type Game struct {
+//	ID       int      `json:"id"`
+//	Teams    []string `json:"Teams"`
+//	Players1 []string `json:"Players1"`
+//	Players2 []string `json:"Players2"`
+//}
 
 //Games initialises a list of games
-type Games []Game
+//type Games []Game
 
 func allGames(w http.ResponseWriter, r *http.Request) {
 	//Construct an article object
-	games := Games{
-		Game{
+	games := game.Games{
+		game.Game{
 			ID:       1,
 			Teams:    []string{"MSU", "UM"},
 			Players1: []string{"Nargles", "Congala", "Keeb", "Zeeker", "Sensed"},
@@ -54,7 +55,7 @@ func addGames(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, string(body))
 		}
 		//Create a new game instance for consistency
-		var nGame Game
+		var nGame game.Game
 
 		//Unmarshal the body and write to the referenced variable at the same time.
 		errr := json.Unmarshal(body, &nGame)
@@ -85,5 +86,6 @@ func handleRequests() {
 }
 
 func main() {
+
 	handleRequests()
 }
