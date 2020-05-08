@@ -1,4 +1,4 @@
-package main
+package gameMethods
 
 //Game defines a new data structure for a game
 type Game struct {
