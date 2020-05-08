@@ -35,19 +35,29 @@ func allGames(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint hit: All articles endpoint")
 	json.NewEncoder(w).Encode(games)
 }
+
+//POST request handle for inputting future games. Will link to SQL for full integration with GET information pulls.
 func addGames(w http.ResponseWriter, r *http.Request) {
+	//Pull the useful information **add even handling for content type != "application/json"**
 	req := r.Body
+
+	// convert body to a byte stream
 	body, err := ioutil.ReadAll(req)
+
+	//if no errors echo response back to sender in their console (debugging stuff i guess)
 	if err == nil && body != nil {
 		fmt.Fprintf(w, string(body))
 	}
+	//Create a new game instance for consistency
 	var nGame Game
-	errr := json.NewDecoder(r.Body).Decode(&nGame)
 
+	//Unmarshal the body and write to the referenced variable at the same time.
+	errr := json.Unmarshal(body, &nGame)
 	if errr != nil {
-
+		//Insert error handling statements here.
 	}
-	//fmt.Fprintf(w, nGame)
+	// Print statement to see if i can access the info. (I can :)
+	fmt.Fprintf(w, string(nGame.Teams[0]))
 }
 
 //Function to display a homepage
