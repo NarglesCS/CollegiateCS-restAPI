@@ -63,7 +63,12 @@ func addGames(w http.ResponseWriter, r *http.Request) {
 			//Insert error handling statements here.
 		}
 		// Print statement to see if i can access the info. I can :)
-		fmt.Fprintf(w, string(nGame.Teams[0]))
+		fmt.Fprintf(w, string(nGame.Match())+"\n")
+		fmt.Fprintf(w, string(nGame.Team1())+"\n")
+		fmt.Fprintf(w, string(nGame.Team2())+"\n")
+		fmt.Fprintf(w, nGame.Output(nGame.Players(1))+"\n")
+		fmt.Fprintf(w, nGame.Output(nGame.Players(2))+"\n")
+		fmt.Fprintf(w, nGame.Output(nGame.Players(3))+"\n")
 	} else {
 		fmt.Fprintf(w, "Post Request not of type application/json")
 	}
