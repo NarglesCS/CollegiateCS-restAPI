@@ -1,4 +1,4 @@
-# restAPI
+# Collegiate CSGO restAPI
 REST API for my website written in GO
 
 This a work in progress API for my website collegiatecs.com
