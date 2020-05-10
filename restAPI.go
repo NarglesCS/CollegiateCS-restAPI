@@ -22,7 +22,7 @@ func allGames(w http.ResponseWriter, r *http.Request) {
 	var curGame game.Game
 	for rows.Next(){
 
-		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, showMatch.TeamsID, showMatch.Map, showMatch.Roster1, showMatch.Roster2){
+		if err := gameRows.Scan(&curGame.GameID, &curGame.Teams, &curGame.TeamsID, &curGame.Map, &curGame.Roster1, &curGame.Roster2){
 			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
 		} else {
 			lsGames = append(lsGames, curGame)
@@ -73,7 +73,21 @@ func addGames(w http.ResponseWriter, r *http.Request) {
 
 //showMatch is designed to return a specific game for the showmatch part of webpage
 func showMatch(w http.ResponseWriter, r *http.Request) {
+	/*Code to access SQL
+	 */
 
+	/* Code for iterating through rows
+	gameRows := db.Query("select x,y,z from whatever")
+	for rows.Next(){
+		var showMatch game.Game
+		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, &showMatch.TeamsID, &showMatch.Map, &showMatch.Roster1, &showMatch.Roster2){
+			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
+		}
+		else if showMatch.GameID == 1214{
+			json.NewEncoder(w).Encode(showMatch)
+		}
+	}
+	*/
 }
 func gameUpcoming(w http.ResponseWriter, r *http.Request) {
 	/*Code to access SQL
@@ -85,13 +99,41 @@ func gameUpcoming(w http.ResponseWriter, r *http.Request) {
 	var curGame game.Game
 	for rows.Next(){
 
-		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, showMatch.TeamsID, showMatch.Map, showMatch.Roster1, showMatch.Roster2){
+		if err := gameRows.Scan(&curGame.GameID, &curGame.Teams, &curGame.TeamsID, &curGame.Map, &curGame.Roster1, &curGame.Roster2){
 			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
 		} else {
 			lsGames = append(lsGames, curGame)
 		}
 	}
 	*/
+	/*Code to find the latest 5 additions to the game list.
+	var upcomingGames game.Games
+	for i=0;i<5{
+		upcomingGames = append(upcomingGames, lsGames[i])
+		i++
+	}
+	*/
+}
+
+func showResults(w http.ResponseWriter, r *http.Request) {
+	/*Code to access SQL
+	 */
+
+	/* Code for iterating through rows
+	resultRows := db.Query("select x,y,z from whatever")
+	var lsResults game.Results
+	var curResult game.Result
+	for rows.Next(){
+
+		if err := resultRows.Scan(&curResult.GameID, &curResult.Teams, &curResult.TeamsID, &curResult.Map, &curResult.Roster1, &curResult.Roster2){
+			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
+		} else {
+			lsResults = append(lsResults, curcurResultGame)
+		}
+	}
+	json.NewEncoder(w).Encode(lsResults)
+	*/
+
 }
 
 //Function to display a homepage
@@ -104,10 +146,11 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/Schedule", allGames).Methods("GET")
-	myRouter.HandleFunc("/Schedule", addGames).Methods("POST")
-	myRouter.HandleFunc("/Upcoming", gameUpcoming).Methods("GET")
-	myRouter.HandleFunc("/Showmatch", showMatch).Methods("GET")
+	myRouter.HandleFunc("/Schedule", allGames).Methods("GET")     //Service for upcoming games page 				-Ready for SQL testing
+	myRouter.HandleFunc("/Upcoming", gameUpcoming).Methods("GET") //Service for the next 5 upcoming games			-Ready for SQL testing
+	myRouter.HandleFunc("/Showmatch", showMatch).Methods("GET")   //Service for the showmatch						-Ready for SQL testing
+	myRouter.HandleFunc("/Schedule", addGames).Methods("POST")    //Service to put upcoming games in the system		-Ready for SQL testing
+	myRouter.HandleFunc("/Results", showResults).Methods("GET")   //Service for the results page					-Not ready
 
 	log.Fatal(http.ListenAndServe(":8000", myRouter))
 }
