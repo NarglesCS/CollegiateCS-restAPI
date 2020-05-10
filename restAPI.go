@@ -33,7 +33,7 @@ func allGames(w http.ResponseWriter, r *http.Request) {
 	//Construct an game object
 	MSUset := game.DummySet()
 	//Print game object in the form of JSON
-	fmt.Println("Endpoint hit: All articles endpoint")
+	fmt.Println("Endpoint hit: All games endpoint")
 	json.NewEncoder(w).Encode(MSUset)
 }
 
