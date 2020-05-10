@@ -119,8 +119,8 @@ func DummyGame() Game {
 }
 
 //DummySet returns an example Setmatch object
-func DummySet() Setmatch {
-	exSet := Setmatch{
+func DummySet() Set {
+	exSet := Set{
 		MatchID: 5423,
 		Teams:   [2]string{"MSU", "UM"},
 		TeamsID: [2]int{123, 890},
