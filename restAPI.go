@@ -30,9 +30,9 @@ func allGames(w http.ResponseWriter, r *http.Request) {
 	}
 	*/
 
-	//Construct an article object
+	//Construct an game object
 	MSUset := game.DummySet()
-	//Print article object in the form of JSON
+	//Print game object in the form of JSON
 	fmt.Println("Endpoint hit: All articles endpoint")
 	json.NewEncoder(w).Encode(MSUset)
 }
@@ -73,18 +73,22 @@ func addGames(w http.ResponseWriter, r *http.Request) {
 
 //showMatch is designed to return a specific game for the showmatch part of webpage
 func showMatch(w http.ResponseWriter, r *http.Request) {
+
+}
+func gameUpcoming(w http.ResponseWriter, r *http.Request) {
 	/*Code to access SQL
 	 */
 
 	/* Code for iterating through rows
 	gameRows := db.Query("select x,y,z from whatever")
+	var lsGames game.Games
+	var curGame game.Game
 	for rows.Next(){
-		var showMatch game.Game
+
 		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, showMatch.TeamsID, showMatch.Map, showMatch.Roster1, showMatch.Roster2){
 			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
-		}
-		else if showMatch.GameID == 1214{
-			json.NewEncoder(w).Encode(showMatch)
+		} else {
+			lsGames = append(lsGames, curGame)
 		}
 	}
 	*/
@@ -102,12 +106,12 @@ func handleRequests() {
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/Schedule", allGames).Methods("GET")
 	myRouter.HandleFunc("/Schedule", addGames).Methods("POST")
+	myRouter.HandleFunc("/Upcoming", gameUpcoming).Methods("GET")
 	myRouter.HandleFunc("/Showmatch", showMatch).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", myRouter))
 }
 
 func main() {
-
 	handleRequests()
 }
