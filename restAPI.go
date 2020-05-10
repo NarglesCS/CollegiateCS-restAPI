@@ -11,30 +11,30 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Game defines a new data structure for a game
-//type Game struct {
-//	ID       int      `json:"id"`
-//	Teams    []string `json:"Teams"`
-//	Players1 []string `json:"Players1"`
-//	Players2 []string `json:"Players2"`
-//}
-
-//Games initialises a list of games
-//type Games []Game
-
+// Function to return all games in a db(not hooked up or coded)
 func allGames(w http.ResponseWriter, r *http.Request) {
-	//Construct an article object
-	games := game.Games{
-		game.Game{
-			ID:       1,
-			Teams:    []string{"MSU", "UM"},
-			Players1: []string{"Nargles", "Congala", "Keeb", "Zeeker", "Sensed"},
-			Players2: []string{"Angel", "Prophet", "Psych", "Koi", "Fidel"},
-		},
+	/*Code to access SQL
+	 */
+
+	/* Code for iterating through rows
+	gameRows := db.Query("select x,y,z from whatever")
+	var lsGames game.Games
+	var curGame game.Game
+	for rows.Next(){
+
+		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, showMatch.TeamsID, showMatch.Map, showMatch.Roster1, showMatch.Roster2){
+			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
+		} else {
+			lsGames = append(lsGames, curGame)
+		}
 	}
+	*/
+
+	//Construct an article object
+	MSUset := game.DummySet()
 	//Print article object in the form of JSON
 	fmt.Println("Endpoint hit: All articles endpoint")
-	json.NewEncoder(w).Encode(games)
+	json.NewEncoder(w).Encode(MSUset)
 }
 
 //POST request handle for inputting future games. Will link to SQL for full integration with GET information pulls.
@@ -62,17 +62,32 @@ func addGames(w http.ResponseWriter, r *http.Request) {
 		if errr != nil {
 			//Insert error handling statements here.
 		}
-		// Print statement to see if i can access the info. I can :)
-		fmt.Fprintf(w, string(nGame.Match())+"\n")
-		fmt.Fprintf(w, string(nGame.Team1())+"\n")
-		fmt.Fprintf(w, string(nGame.Team2())+"\n")
-		fmt.Fprintf(w, nGame.Output(nGame.Players(1))+"\n")
-		fmt.Fprintf(w, nGame.Output(nGame.Players(2))+"\n")
-		fmt.Fprintf(w, nGame.Output(nGame.Players(3))+"\n")
+		/*Code for SQL connection and INSERT query.
+		 */
+
 	} else {
 		fmt.Fprintf(w, "Post Request not of type application/json")
 	}
 
+}
+
+//showMatch is designed to return a specific game for the showmatch part of webpage
+func showMatch(w http.ResponseWriter, r *http.Request) {
+	/*Code to access SQL
+	 */
+
+	/* Code for iterating through rows
+	gameRows := db.Query("select x,y,z from whatever")
+	for rows.Next(){
+		var showMatch game.Game
+		if err := gameRows.Scan(&showMatch.GameID, &showMatch.Teams, showMatch.TeamsID, showMatch.Map, showMatch.Roster1, showMatch.Roster2){
+			Error code here (NOTE: Roster1 and Roster2 will be more complicated because they are a custom object)
+		}
+		else if showMatch.GameID == 1214{
+			json.NewEncoder(w).Encode(showMatch)
+		}
+	}
+	*/
 }
 
 //Function to display a homepage
@@ -87,6 +102,8 @@ func handleRequests() {
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/Schedule", allGames).Methods("GET")
 	myRouter.HandleFunc("/Schedule", addGames).Methods("POST")
+	myRouter.HandleFunc("/Showmatch", showMatch).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":8000", myRouter))
 }
 
