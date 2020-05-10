@@ -36,6 +36,16 @@ type Stats struct {
 	//Lots more, but this is fine for testing
 }
 
+//PlayerList returns a list of all players on a given roster
+func (r *Roster) PlayerList() []string {
+	var lsPlayer []string
+	for _, pro := range r.TeamRoster {
+		lsPlayer = append(lsPlayer, pro.Username)
+	}
+
+	return lsPlayer
+}
+
 //DummyStats is supposed to return an example Stats object
 func DummyStats() Stats {
 	ExStats := Stats{
