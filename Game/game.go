@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+	"strconv"
 	"strings"
 	"team"
 )
@@ -20,8 +22,8 @@ type Game struct {
 //Games is a list of games. Added just in case but the only use should be in Setmatch stuct
 type Games []Game
 
-//Setmatch initialises a Bo3 or Bo5
-type Setmatch struct {
+//Set initialises a Bo3 or Bo5
+type Set struct {
 	MatchID  int       `json:"MatchID"`
 	Teams    [2]string `json:"Teams"`
 	TeamsID  [2]int    `json:"TeamsID"`
@@ -29,35 +31,17 @@ type Setmatch struct {
 	GameList []Game    `json:"GameList"`
 }
 
-//Setmatches was created just in case i would need it. But will probably be unused ~~Unused atm~~
-type Setmatches []Setmatch
+//Sets was created just in case i would need it. But will probably be unused ~~Unused atm~~
+type Sets []Set
 
 //GameNum method to get id value
 func (g *Game) GameNum() int {
 	return (g.GameID)
 }
 
-//GameNum for type Setmatch
-func (g *Setmatch) GameNum() []int {
-	var id []int
-	for _, item := range g.GameList {
-		id = append(id, item.GameNum())
-	}
-	return (id)
-}
-
 //Match method to report teams ({TEAM 1} vs {TEAM 2})
 func (g *Game) Match() string {
-	return (string(g.Teams[0]) + " vs. " + string(g.Teams[1]))
-}
-
-//Match method to report teams for Games datatype
-func (g *Setmatch) Match() []string {
-	var matches []string
-	for _, item := range g.GameList {
-		matches = append(matches, item.Match())
-	}
-	return (matches)
+	return (string(g.Teams[0]) + " vs. " + string(g.Teams[1]) + " on " + g.Map)
 }
 
 //Team1 method to report team1
@@ -82,10 +66,43 @@ func (g *Game) Roster(tmID int) team.Roster {
 	return roster
 }
 
-//Output a []string type as a single string deliminated with a " " character.
-func (g *Game) Output(ls []string) string {
+//Match method to report teams for Setmatch datatype
+func (s *Set) Match() []string {
+	var matches []string
+	for _, item := range s.GameList {
+		matches = append(matches, item.Match())
+	}
+	return (matches)
+}
 
-	return strings.Join(ls, " ")
+//GameNum for type Set
+func (s *Set) GameNum() []int {
+	var id []int
+	for _, item := range s.GameList {
+		id = append(id, item.GameNum())
+	}
+	return (id)
+}
+
+//Output a []string type as a single string deliminated with a " " character.
+func Output(ls []string) string {
+	return strings.Join(ls, ", ")
+}
+
+//Print is a function to output a game object.
+func Print(g *Game) {
+	fmt.Println("Game ID: " + strconv.Itoa(g.GameID))
+	fmt.Println("Teams: " + g.Match())
+	fmt.Println(g.Team1() + " Roster: " + Output(g.Roster1.PlayerList()))
+	fmt.Println(g.Team2() + " Roster: " + Output(g.Roster1.PlayerList()))
+	fmt.Println()
+}
+
+//SetPrint is a function to output a Setmatch object
+func SetPrint(s *Set) {
+	for _, g := range s.GameList {
+		Print(&g)
+	}
 }
 
 //DummyGame returns an example Game object
