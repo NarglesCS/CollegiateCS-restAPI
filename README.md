@@ -7,7 +7,7 @@ Currently, the API that is on the server is written in node.js+express. I am try
 
 -restAPI  
 ---Game - module for game objects and their methods  
----Roster - module for roster objects and their methods
+---Roster - module for roster objects and their methods  
 ---Match - module for match objects and their methods  
 ---Player - module for player objects and their methods  
 ---Stats - module for stats objects and their methods  
